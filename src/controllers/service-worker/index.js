@@ -69,6 +69,22 @@ class ServiceWorkerController {
 
   updateReady(worker) {
     console.debug('Service Worker - Update ready');
+    const toastEl = document.createElement('div');
+    toastEl.style = 'position:fixed;z-index:9999;bottom:8px;right:8px;background-color:#333;color:white;border-radius:3px;display:flex;box-shadow:0px 1px 4px 0px rgba(0, 0, 0, 0.5), 0px 1px 8px 5px rgba(126, 172, 255, 0.72);';
+    const titleEl = document.createElement('h3');
+    titleEl.innerText = 'A new version of this site is available';
+    titleEl.style = 'padding:8px 26px';
+    const buttonEl = document.createElement('button');
+    buttonEl.innerText = 'Update now';
+    buttonEl.style = 'padding: 16px 32px; background-color:#444;color:skyblue;border:none;font-weight:bold;font-size:18px;cursor:pointer;';
+    buttonEl.onclick = e => {
+      worker.postMessage(SERVICE_WORKER_ACTION_SKIP_WAITING);
+      document.body.removeChild(toastEl);
+    };
+    [titleEl, buttonEl].forEach(el => {
+      toastEl.appendChild(el);
+    });
+    document.body.appendChild(toastEl);
   }
 }
 
